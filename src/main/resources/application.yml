@@ -6,8 +6,8 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://codesver.cfo0oageyl2q.ap-northeast-2.rds.amazonaws.com:3306/am_blog
-    username: codesver
+    url: jdbc:mysql://localhost:3306/am_blog
+    username: root
     password: wodnjs0716!
   jpa:
     hibernate:
