@@ -43,6 +43,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         Map<String, Object> body = new HashMap<>();
         body.put("username", user.getUsername());
+        body.put("name", user.getName());
         body.put("role", user.getRole().toString());
         body.put("expire", new Date(System.currentTimeMillis() + 1000 * 60).getTime());
         body.put("token", "Bearer " + token);
