@@ -16,6 +16,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -34,8 +37,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        User principleDetails = (User) authResult.getPrincipal();
-        String token = tokenizer.GenerateToken(principleDetails.getUsername());
+        User user = (User) authResult.getPrincipal();
+        String token = tokenizer.GenerateToken(user.getUsername());
         response.addHeader("Authorization", "Bearer " + token);
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("username", user.getUsername());
+        body.put("name", user.getName());
+        body.put("role", user.getRole().toString());
+        body.put("expire", new Date(System.currentTimeMillis() + 1000 * 60).getTime());
+        body.put("token", "Bearer " + token);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.writeValue(response.getWriter(), body);
     }
 }
